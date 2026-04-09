@@ -287,8 +287,24 @@
                 "Carretera a Masaya": { "Carretera a masaya (Managua)": 30, "KM 13 en adelante": 50, "Ticuantepe": 50, "Veracruz": 30, "Nindiri": 50,"Masaya": 60, "Granada": 70, "Catarina": 70,"Niquinohomo": 50, "Diriamba": 50, "Diriomo":50, "Diria": 50, "Nandasmo": 50, "Apoyo": 60, "Rivas": 100, "San Juan Del Sur": 120, "Tola": 120, "Peñas Blancas": 130, "Nandaime": 80 },
                 "Carretera Norte": { "Carretera Norte (Managua)": 30, "Tipitapa": 40, "Boaco": 80, "San benito": 50, "Juigalpa - Chontales": 100, "Santo Tomas - Chontales": 140, "Ciudad Dario": 60, "Camoapa": 100},
                "Carretera N. Leon": { "Carretera N. leon (Managua)": 30, "ciudad sandino": 30, "Los Brasiles": 40, "Mateare": 50, "Vistas de momotombo": 40, "Nagarote": 60, "Ciudad Dario": 60, "La Paz Centro": 70},
-               "Carretera Sur": { "Carretera Sur hasta el km 10": 30, "Managua. Monte Tabor o INCAE": 30, "El crucero": 60, "Carazo": 70, "Santa Teresa": 70, "La conquista": 50, "Jinotepe": 70, "Masatepe": 60, "Diriamba":60, "La boquita":100, "Los cedros ctra. Sur": 30, "Puerto Sandino": 100}
+               "Carretera Sur": { "Carretera Sur hasta el km 10": 30, "Managua. Monte Tabor o INCAE": 30, "El crucero": 60, "Carazo": 70, "Santa Teresa": 70, "La conquista": 50, "Jinotepe": 70, "Masatepe": 60, "Diriamba":60, "La boquita":100, "Los cedros ctra. Sur": 30, "Puerto Sandino": 100},
+                },
+                "Zona Norte": {
+                "ESTELI / Carre Pana Nor": {
+                    "Esteli": 100, "Condega": 120, "Pueblo Nuevo": 140, "Palacaguina": 140, "Yanli": 140, "Somoto": 100, "Ocotal": 100, "Jalapa": 100, "San Rafael del Norte": 140, "Quilali": 140, "La concordia": 140
+                },
+                  "Carret Pana Sur": {
+                    "La Cruz":120, "La trinidad": 120, "San Isidro": 120, "Sebaco": 120, "Matagalpa": 100, "Jinotega": 140, "Dario": 120, "Muymuy": 140, "Matiguas": 140
+                },
+            },
+ "Occidente": {
+                "Chinandega-Carretera Leon": { "Chichigalpa": 120, "Posoltega": 120, "Telica": 140, "Leon": 140, "Poneloya": 140 },
+                "Carretera Somotillo": { "Rancheria": 120, "La villa 15 de julio": 140, "Villa Nueva": 100, "Somotillo": 120, "5 Pinos": 140, "Sto. Tomas del Norte": 140, "El Sauce": 140, "Mina el Limon": 140, "Guasaule": 140 },
+                "Carretera El Viejo": { "Carretera El Viejo": 120, "Tonala": 140, "Jiquilillo": 120, "Cosiguina": 120 },
+                "Carretera El Realejo / Corinto": { "El Realejo": 120, "Paso Caballo": 140, "Corinto": 140 }
             }
+
+
         }
     };
 

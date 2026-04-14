@@ -305,7 +305,11 @@
                 },
                 "Carretera Nueva Leon": {
                     "Carretera N. Leon (Managua)": 0, "Ciudad Sandino": 0, "Los Brasiles": 185, "Ciudad el Doral": 185, "Mateare": 370, "Vistas de momotombo": 370, "Nagarote": 925, "La Paz Centro": 1110
+                },
+                "Managua Centro": {
+                    " Managua Centro": 0,
                 }
+
             },
             "Zona Norte": {
                 "ESTELI / Carre Pana Nor": {
@@ -509,7 +513,7 @@
             { nombre: "Puerta de vidrio (Limpieza Profunda)", precio: 600 },
             { nombre: "Bateria de Baños (Limpieza Profunda)", precio: 3700 },
             { nombre: "Inodoro (Limpieza Profunda)", precio: 740 },
-            { nombre: "Orinario(Limpieza Profunda)", precio: 550 },
+            { nombre: "Urinario(Limpieza Profunda)", precio: 550 },
             { nombre: "Lavamanos(Limpieza Profunda)", precio: 400 }
         ],
 

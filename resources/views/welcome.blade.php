@@ -174,6 +174,7 @@
                 <label class="form-label fw-semibold small">Nombre Completo</label>
                 <input type="text" id="cliente_nombre" class="form-control form-control-sm" placeholder="Nombre del cliente">
             </div>
+
             <div class="col-md-3">
                 <label class="form-label fw-semibold small">Dirección</label>
                 <input type="text" id="cliente_direccion" class="form-control form-control-sm" placeholder="Dirección exacta">
@@ -907,7 +908,15 @@ async function generarPDF() {
     if(carrito.length === 0) return alert("Agregue servicios para generar la cotización");
 
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF('p', 'mm', 'a4');
+
+    // --- CAMBIO 1: ACTIVAR COMPRESIÓN ---
+    const doc = new jsPDF({
+        orientation: 'p',
+        unit: 'mm',
+        format: 'a4',
+        compress: true // Esto comprime textos y vectores automáticamente
+    });
+
     const emp = document.getElementById('empresa_selector').value;
     const moneda = (emp === "Pethelios") ? "$" : "C$";
     const brandColor = (emp === "Espumas") ? [0, 51, 153] : [159, 97, 49];
@@ -916,26 +925,22 @@ async function generarPDF() {
     // CONEXIÓN CON FIREBASE PARA EL NÚMERO CORRELATIVO
     // ==========================================================
     const incluirCliente = document.getElementById('activar_cliente')?.checked;
-    let numeroActual = 7560; // Valor inicial si la base de datos está vacía
+    let numeroActual = 7560;
 
     if (incluirCliente) {
         try {
-            // Leemos el valor actual de la nube
             const snapshot = await database.ref('contador_pdf').once('value');
             const valorNube = snapshot.val();
-
             if (valorNube !== null) {
                 numeroActual = valorNube;
             } else {
-                // Si es la primera vez absoluta, inicializamos en la nube
                 await database.ref('contador_pdf').set(7560);
             }
         } catch (error) {
-        console.error("Error detallado:", error);
-        // Esta línea es la clave, nos dirá el "secreto" del fallo
-        alert("Fallo de conexión: " + error.message);
-        return;
-    }
+            console.error("Error detallado:", error);
+            alert("Fallo de conexión: " + error.message);
+            return;
+        }
     }
 
     // 1. PRIMERO DIBUJAMOS LA CABECERA (EL FONDO)
@@ -945,19 +950,40 @@ async function generarPDF() {
     // 2. AHORA DIBUJAMOS EL TEXTO ENCIMA DE LA CABECERA
     if (incluirCliente) {
         doc.setFontSize(14);
-        doc.setTextColor(255, 255, 255); // Color BLANCO
+        doc.setTextColor(255, 255, 255);
         doc.setFont("helvetica", "bold");
         doc.text(`No. Proforma: ${numeroActual}`, 150, 25);
     }
 
-    // --- LOGO Y TÍTULOS ---
+    // --- LOGO OPTIMIZADO (CAMBIO 2) ---
+   // --- LOGO OPTIMIZADO Y SIN FONDO NEGRO ---
     const img = document.getElementById('img-logo');
     try {
+        // Dibujamos el cuadro blanco redondeado de fondo en el PDF
         doc.setFillColor(255, 255, 255);
         doc.roundedRect(45, 10, 25, 25, 2, 2, 'F');
-        doc.addImage(img, 'PNG', 47, 12, 21, 21);
-    } catch (e) { console.warn("Logo no disponible"); }
 
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 200;
+        canvas.height = 200;
+
+        // --- SOLUCIÓN AL FONDO NEGRO: Pintar fondo blanco en el canvas ---
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Dibujamos el logo encima del fondo blanco
+        ctx.drawImage(img, 0, 0, 200, 200);
+
+        // Convertimos a JPEG liviano (ahora el fondo será blanco, no negro)
+        const imgData = canvas.toDataURL('image/jpeg', 0.7);
+
+        doc.addImage(imgData, 'JPEG', 47, 12, 21, 21, undefined, 'FAST');
+    } catch (e) {
+        console.warn("Logo no disponible");
+    }
+
+    // --- RESTO DEL CÓDIGO (SIN CAMBIOS PARA NO BORRAR NADA) ---
     doc.setTextColor(255, 255, 255);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(22);
@@ -1042,7 +1068,7 @@ async function generarPDF() {
         styles: { overflow: 'linebreak' }
     });
 
-    // --- TOTALES ---
+    // --- TOTALES Y PIE DE PÁGINA ---
     currentY = doc.lastAutoTable.finalY + 20;
     if (currentY > 260) { doc.addPage(); currentY = 30; }
 
@@ -1076,16 +1102,22 @@ async function generarPDF() {
     currentY += 15;
     drawTotalRow("TOTAL NETO:", calc.total, currentY, true);
 
-    // --- PIE DE PÁGINA ---
+    const notas = [
+        "Nota: Oferta Válida por 30 días",
+        "NOTA: Se solicita conexión a agua y energía para conectar equipo de limpieza"
+    ];
     doc.setFontSize(8);
+    doc.setTextColor(0);
+    doc.text(notas[0], 105, 270, { align: 'center' });
+    doc.text(notas[1], 105, 275, { align: 'center' });
+
+    doc.setFontSize(7);
     doc.setTextColor(150);
     doc.text(`${emp} Nicaragua - Documento Generado Digitalmente`, 105, 290, { align: 'center' });
 
     // --- GUARDADO E INCREMENTO EN NUBE ---
     if (incluirCliente) {
         doc.save(`Proforma_${numeroActual}_${emp}.pdf`);
-
-        // AQUÍ ACTUALIZAMOS FIREBASE PARA LA SIGUIENTE PC
         await database.ref('contador_pdf').set(numeroActual + 1);
     } else {
         doc.save(`Presupuesto_${emp}_${new Date().getTime()}.pdf`);
